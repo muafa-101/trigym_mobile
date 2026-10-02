@@ -1,98 +1,132 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import { useRouter } from "expo-router";
+import React from "react";
+import {
+  Image,
+  Pressable,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
+import { styles } from "./styles";
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+const LOGO_SOURCE = require("../../assets/logo.png");
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+const PROFILE = {
+  name: "Muhammad Kharisma Aditya Putra",
+  nim: "02010602",
+};
+
+const FACILITIES = [
+  {
+    title: "Peralatan Modern",
+    desc: "Lebih dari 60 unit alat kardio dan beban dari merek terpercaya, dirawat rutin setiap minggu.",
+  },
+  {
+    title: "Personal Trainer",
+    desc: "Pelatih bersertifikat yang menyusun program sesuai kondisi dan target kamu.",
+  },
+  {
+    title: "Area luas & nyaman",
+    desc: "Ruang latihan 800 m² dengan pendingin udara, loker, dan kamar bilas air panas.",
+  },
+];
+
+type ClassIcon = React.ComponentProps<typeof MaterialCommunityIcons>["name"];
+
+const CLASSES: { label: string; icon: ClassIcon }[] = [
+  { label: "YOGA &\nPILATES", icon: "yoga" },
+  { label: "WEIGHT\nTRAINING", icon: "weight-lifter" },
+  { label: "CARDIO\n& HIT", icon: "heart-pulse" },
+  { label: "ZUMBA", icon: "human-female-dance" },
+];
+
+export default function LandingScreen() {
+  const router = useRouter();
+
+  const handleProfilePress = () => {
+    router.push("/profile-section/profile" as any);
+  };
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
+    <SafeAreaView style={styles.safe}>
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        showsVerticalScrollIndicator={false}
+      >
+        <View style={styles.page}>
+          {/* Kartu profil (Pressable) */}
+          <Pressable
+            onPress={handleProfilePress}
+            android_ripple={{ color: "rgba(0,0,0,0.1)" }}
+            style={({ pressed }) => [
+              styles.profileCard,
+              pressed && { opacity: 0.85 },
+            ]}
+          >
+            <Ionicons name="person" size={44} color="#FFFF" />
+            <View style={styles.profileTextWrap}>
+              <Text style={styles.profileText}>{PROFILE.name}</Text>
+              <Text style={styles.profileText}>{PROFILE.nim}</Text>
+            </View>
+          </Pressable>
+
+          {/* Hero */}
+          <View style={styles.hero}>
+            <View style={styles.heroTopBar} />
+            <View style={styles.heroDivider} />
+            <View style={styles.heroBody}>
+              <Image
+                source={LOGO_SOURCE}
+                style={styles.logo}
+                resizeMode="contain"
+              />
+              <Text style={styles.heroText}>
+                Tempat latihan yang lengkap, bersih, dan nyaman. Alat modern,
+                pelatih berpengalaman, dan jadwal kelas yang fleksibel untuk
+                semua level.
+              </Text>
+            </View>
+          </View>
+
+          {/* Fasilitas kami */}
+          <View style={styles.facilitySection}>
+            <View style={styles.facilityHeader}>
+              <Text style={styles.sectionTitle}>FASILITAS KAMI</Text>
+            </View>
+            <View style={styles.facilityRow}>
+              {FACILITIES.map((item) => (
+                <View key={item.title} style={styles.facilityCard}>
+                  <Text style={styles.facilityTitle}>{item.title}</Text>
+                  <Text style={styles.facilityDesc}>{item.desc}</Text>
+                </View>
+              ))}
+            </View>
+          </View>
+
+          {/* Pilihan kelas */}
+          <View style={styles.classSection}>
+            <View style={styles.classHeader}>
+              <Text style={styles.sectionTitle}>PILIHAN KELAS</Text>
+            </View>
+            <View style={styles.classRow}>
+              {CLASSES.map((item) => (
+                <View key={item.label} style={styles.classCard}>
+                  <Text style={styles.classLabel}>{item.label}</Text>
+                  <View style={styles.classIconWrap}>
+                    <MaterialCommunityIcons
+                      name={item.icon}
+                      size={34}
+                      color="#FFFFFF"
+                    />
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
-
-export default function HomeScreen() {
-  return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
-
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
-
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
-  },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
-  },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
-});
