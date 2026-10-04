@@ -56,6 +56,18 @@ export const styles = StyleSheet.create({
     fontWeight: "600",
   },
 
+  /* Progress bar sisa membership (lebar & warna diatur inline) */
+  progressTrack: {
+    height: 8,
+    backgroundColor: "rgba(255,255,255,0.3)",
+    borderRadius: 4,
+    overflow: "hidden",
+  },
+  progressFill: {
+    height: "100%",
+    borderRadius: 4,
+  },
+
   /* Baris histori/qr + flame */
   utilityRow: {
     flexDirection: "row",
@@ -203,4 +215,31 @@ export const styles = StyleSheet.create({
     textAlign: "center",
   },
   classIconWrap: { flex: 1, justifyContent: "center" },
+
+  /* Riwayat check-in (BARU) */
+  historySection: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 14,
+    padding: 12,
+    gap: 8,
+  },
+  historyTitle: { color: "#2A4B9B", fontSize: 14, fontWeight: "700" },
+  historyItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: GRAY,
+  },
+  historyClass: { color: "#333333", fontSize: 12, fontWeight: "600" },
+  historyDate: { color: "#777777", fontSize: 10 },
+  historyTimeWrap: { alignItems: "flex-end", gap: 2 },
+  historyTime: { color: "#2E7D32", fontSize: 11, fontWeight: "700" },
+  historyTotal: {
+    color: "#555555",
+    fontSize: 11,
+    fontWeight: "600",
+    textAlign: "right",
+  },
 });

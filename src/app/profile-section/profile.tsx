@@ -2,36 +2,33 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
+import {
+  CHECKIN_HISTORY,
+  MEMBER,
+  WEEKLY_CLASSES,
+} from "../data/profileData";
+import {
+  countVisits,
+  getCheckoutLabel,
+  getDaysLeft,
+  getStatusInfo,
+} from "../utils/gymHelpers";
 import { styles } from "./profile_styles";
 
 /* ------------------------------------------------------------------
  * Data
  * ------------------------------------------------------------------ */
-const MEMBER = {
-  name: "Muhammad Kharisma Aditya Putra",
-  email: "yenderruaditya@gmail.com",
-  nim: "02010602",
-  validUntil: "17/08/1945",
-};
-
 const STATUS = {
-  label: "RAMAI",
   checkinCount: 120,
 };
+
+// Lama membership (hari), dipakai untuk menghitung panjang progress bar
+const MEMBERSHIP_TOTAL_DAYS = 365;
 
 const LIVE_CLASS = {
   title: "KELAS WEIGHT TRAINING",
   trainer: "Abdoel Fatah",
 };
-
-type ClassIcon = React.ComponentProps<typeof MaterialCommunityIcons>["name"];
-
-const WEEKLY_CLASSES: { label: string; icon: ClassIcon }[] = [
-  { label: "YOGA &\nPILATES", icon: "yoga" },
-  { label: "WEIGHT\nTRAINING", icon: "weight-lifter" },
-  { label: "CARDIO\n& HIT", icon: "heart-pulse" },
-  { label: "ZUMBA", icon: "human-female-dance" },
-];
 
 /* ------------------------------------------------------------------
  * Screen
@@ -39,30 +36,38 @@ const WEEKLY_CLASSES: { label: string; icon: ClassIcon }[] = [
 export default function ProfileScreen() {
   const router = useRouter();
 
-  const handleExtend = () => {
-    // Aksi saat tombol "PERPANJANG" ditekan
+  // Hasil dari fungsi helper (langkah 2)
+  const daysLeft = getDaysLeft(MEMBER.validUntil);
+  const statusInfo = getStatusInfo(STATUS.checkinCount);
+  const totalVisits = countVisits(CHECKIN_HISTORY);
+
+  // Nilai untuk inline style (langkah 3)
+  const progressPercent = Math.min(
+    Math.max(daysLeft / MEMBERSHIP_TOTAL_DAYS, 0),
+    1
+  );
+  const progressColor =
+    daysLeft > 30 ? "#B6F2E0" : daysLeft > 7 ? "#FFD27A" : "#FF5C5C";
+
+  function handleExtend() {
     router.push("/perpanjang" as any);
-  };
+  }
 
-  const handleHistory = () => {
-    // Aksi saat tombol "HISTORI" ditekan
+  function handleHistory() {
     router.push("/histori" as any);
-  };
+  }
 
-  const handleQrCode = () => {
-    // Aksi saat tombol "QR" ditekan
+  function handleQrCode() {
     router.push("/QR" as any);
-  };
+  }
 
-  const handleFollowClass = () => {
-    // Aksi saat tombol "IKUTI" ditekan
+  function handleFollowClass() {
     router.push("/kelas/weight-training" as any);
-  };
+  }
 
-  const handleClassPress = (label: string) => {
-    // Aksi saat salah satu kartu kelas mingguan ditekan
+  function handleClassPress(label: string) {
     router.push({ pathname: "/kelas", params: { nama: label } } as any);
-  };
+  }
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -96,8 +101,22 @@ export default function ProfileScreen() {
               </View>
 
               <Text style={styles.validUntil}>
-                Berlaku hingga {MEMBER.validUntil}
+                Berlaku hingga {MEMBER.validUntil} (
+                {daysLeft > 0 ? `${daysLeft} hari lagi` : "Kedaluwarsa"})
               </Text>
+
+              {/* Progress bar sisa membership (inline style) */}
+              <View style={styles.progressTrack}>
+                <View
+                  style={[
+                    styles.progressFill,
+                    {
+                      width: `${progressPercent * 100}%`,
+                      backgroundColor: progressColor,
+                    },
+                  ]}
+                />
+              </View>
             </View>
           </View>
 
@@ -145,16 +164,24 @@ export default function ProfileScreen() {
           </View>
 
           {/* ---------- Status ramai ---------- */}
-          <View style={styles.statusRow}>
+          <View
+            style={[styles.statusRow, { backgroundColor: statusInfo.color }]}
+          >
             <View style={styles.statusLeft}>
               <Text style={styles.statusLabel}>STATUS :</Text>
               <View style={styles.statusPill}>
-                <Text style={styles.statusPillText}>{STATUS.label}</Text>
+                <Text
+                  style={[styles.statusPillText, { color: statusInfo.color }]}
+                >
+                  {statusInfo.label}
+                </Text>
               </View>
             </View>
             <View style={styles.statusRight}>
               <View style={styles.checkinPill}>
-                <Text style={styles.checkinPillText}>
+                <Text
+                  style={[styles.checkinPillText, { color: statusInfo.color }]}
+                >
                   {STATUS.checkinCount} ORANG CHECK-IN
                 </Text>
               </View>
@@ -210,6 +237,32 @@ export default function ProfileScreen() {
                 </Pressable>
               ))}
             </View>
+          </View>
+
+          {/* ---------- Riwayat check-in ---------- */}
+          <View style={styles.historySection}>
+            <Text style={styles.historyTitle}>Riwayat Check-in</Text>
+
+            {CHECKIN_HISTORY.map((item) => (
+              <View key={item.id} style={styles.historyItem}>
+                <View>
+                  <Text style={styles.historyClass}>{item.className}</Text>
+                  <Text style={styles.historyDate}>{item.date}</Text>
+                </View>
+                <View style={styles.historyTimeWrap}>
+                  <Text style={styles.historyTime}>
+                    Masuk {item.checkInTime}
+                  </Text>
+                  <Text style={styles.historyTime}>
+                    Keluar {getCheckoutLabel(item)}
+                  </Text>
+                </View>
+              </View>
+            ))}
+
+            <Text style={styles.historyTotal}>
+              Total kunjungan: {totalVisits}x
+            </Text>
           </View>
         </View>
       </ScrollView>
