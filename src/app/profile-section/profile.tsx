@@ -2,17 +2,8 @@ import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import React from "react";
 import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
-import {
-  CHECKIN_HISTORY,
-  MEMBER,
-  WEEKLY_CLASSES,
-} from "../data/profileData";
-import {
-  countVisits,
-  getCheckoutLabel,
-  getDaysLeft,
-  getStatusInfo,
-} from "../utils/gymHelpers";
+import { MEMBER, WEEKLY_CLASSES } from "../data/profileData";
+import { getDaysLeft, getStatusInfo } from "../utils/gymHelpers";
 import { styles } from "./profile_styles";
 
 /* ------------------------------------------------------------------
@@ -39,7 +30,6 @@ export default function ProfileScreen() {
   // Hasil dari fungsi helper (langkah 2)
   const daysLeft = getDaysLeft(MEMBER.validUntil);
   const statusInfo = getStatusInfo(STATUS.checkinCount);
-  const totalVisits = countVisits(CHECKIN_HISTORY);
 
   // Nilai untuk inline style (langkah 3)
   const progressPercent = Math.min(
@@ -54,7 +44,7 @@ export default function ProfileScreen() {
   }
 
   function handleHistory() {
-    router.push("/histori" as any);
+    router.push("/profile-section/histori" as any);
   }
 
   function handleQrCode() {
@@ -237,32 +227,6 @@ export default function ProfileScreen() {
                 </Pressable>
               ))}
             </View>
-          </View>
-
-          {/* ---------- Riwayat check-in ---------- */}
-          <View style={styles.historySection}>
-            <Text style={styles.historyTitle}>Riwayat Check-in</Text>
-
-            {CHECKIN_HISTORY.map((item) => (
-              <View key={item.id} style={styles.historyItem}>
-                <View>
-                  <Text style={styles.historyClass}>{item.className}</Text>
-                  <Text style={styles.historyDate}>{item.date}</Text>
-                </View>
-                <View style={styles.historyTimeWrap}>
-                  <Text style={styles.historyTime}>
-                    Masuk {item.checkInTime}
-                  </Text>
-                  <Text style={styles.historyTime}>
-                    Keluar {getCheckoutLabel(item)}
-                  </Text>
-                </View>
-              </View>
-            ))}
-
-            <Text style={styles.historyTotal}>
-              Total kunjungan: {totalVisits}x
-            </Text>
           </View>
         </View>
       </ScrollView>

@@ -37,4 +37,11 @@ export const CHECKIN_HISTORY: CheckinHistory[] = [
     checkInTime: "07:00",
     checkOutTime: "08:00",
   },
+  {
+    id: 4,
+    date: "04/10/2026",
+    className: "Zumba",
+    checkInTime: "19:00",
+    checkOutTime: null,
+  },
 ];
