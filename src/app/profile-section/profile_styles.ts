@@ -57,16 +57,23 @@ export const styles = StyleSheet.create({
   },
 
   /* Baris histori/qr + flame */
-  utilityRow: { flexDirection: "row", gap: 8 },
+  utilityRow: {
+    flexDirection: "row",
+    alignItems: "stretch",
+    gap: 12,
+  },
 
   historyCard: {
-    flex: 1,
+    flex: 2,
     backgroundColor: "#8DEE7E",
-    borderRadius: 14,
+    borderRadius: 20,
     padding: 8,
+  },
+  historyIconsRow: {
+    flex: 1,
+    flexDirection: "column",
     gap: 8,
   },
-  historyIconsRow: { flexDirection: "row", gap: 6 },
   historyIconBox: {
     flex: 1,
     aspectRatio: 1,
@@ -82,11 +89,17 @@ export const styles = StyleSheet.create({
   historyLabelText: { color: "#FFFFFF", fontSize: 10, fontWeight: "700" },
 
   flameCard: {
-    width: 78,
+    flex: 3,
+    aspectRatio: 1,
     backgroundColor: "#C24AFA",
     borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  flameCardPressed: {
+    opacity: 0.85,
+    transform: [{ scale: 0.98 }],
   },
 
   /* Status ramai */

@@ -101,8 +101,8 @@ export default function ProfileScreen() {
             </View>
           </View>
 
-          {/* ---------- Histori / QR + Flame ---------- */}
           <View style={styles.utilityRow}>
+            {/* Kiri: Histori + Scan QR (ditumpuk) */}
             <View style={styles.historyCard}>
               <View style={styles.historyIconsRow}>
                 <Pressable
@@ -114,7 +114,7 @@ export default function ProfileScreen() {
                 >
                   <MaterialCommunityIcons
                     name="calendar-clock"
-                    size={30}
+                    size={26}
                     color="#FFFFFF"
                   />
                   <Text style={styles.historyLabelText}>HISTORI</Text>
@@ -127,15 +127,21 @@ export default function ProfileScreen() {
                     pressed && styles.historyIconBoxPressed,
                   ]}
                 >
-                  <Ionicons name="qr-code" size={28} color="#FFFFFF" />
+                  <Ionicons name="qr-code" size={24} color="#FFFFFF" />
                   <Text style={styles.historyLabelText}>SCAN QR</Text>
                 </Pressable>
               </View>
             </View>
 
-            <View style={styles.flameCard}>
-              <Ionicons name="flame" size={40} color="#FFFFFF" />
-            </View>
+            {/* Kanan: Flame (fitur utama, 1:1) */}
+            <Pressable
+              style={({ pressed }) => [
+                styles.flameCard,
+                pressed && styles.flameCardPressed,
+              ]}
+            >
+              <MaterialCommunityIcons name="fire" size={96} color="#FFFFFF" />
+            </Pressable>
           </View>
 
           {/* ---------- Status ramai ---------- */}
