@@ -48,9 +48,8 @@ export default function ProfileScreen() {
   }
 
   function handleQrCode() {
-    router.push("/QR" as any);
+  router.push("/profile-section/qr" as any);
   }
-
   function handleFollowClass() {
     router.push("/kelas/weight-training" as any);
   }
