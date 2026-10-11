@@ -1,7 +1,7 @@
-import {ClassItem} from "@/app/types/landing";
-import {styles} from "@/app/styles";
-import {Text, View} from "react-native";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import { ClassItem } from "@/types/landing";
+import { styles } from "@/styles/styles";
+import { Text, View } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React from "react";
 
 interface ClassCardProps {

@@ -1,7 +1,7 @@
 import { Stack } from "expo-router";
 import React from "react";
 import { Image, SafeAreaView, Text, View } from "react-native";
-import { styles } from "./qr_styles";
+import { styles } from "../styles/qr_styles";
 
 const QR_URL =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/QR_code_for_mobile_English_Wikipedia.svg/330px-QR_code_for_mobile_English_Wikipedia.svg.png";

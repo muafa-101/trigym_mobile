@@ -4,7 +4,7 @@ import React from "react";
 import { Pressable, SafeAreaView, ScrollView, Text, View } from "react-native";
 import { MEMBER, WEEKLY_CLASSES } from "../data/profileData";
 import { getDaysLeft, getStatusInfo } from "../utils/gymHelpers";
-import { styles } from "./profile_styles";
+import { styles } from "../styles/profile_styles";
 
 /* ------------------------------------------------------------------
  * Data

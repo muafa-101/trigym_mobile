@@ -3,7 +3,7 @@ import React from "react";
 import { SafeAreaView, ScrollView, Text, View } from "react-native";
 import { CHECKIN_HISTORY } from "../data/profileData";
 import { countVisits, getCheckoutLabel } from "../utils/gymHelpers";
-import { styles } from "./histori_styles";
+import { styles } from "../styles/histori_styles";
 
 export default function HistoriScreen() {
   const totalVisits = countVisits(CHECKIN_HISTORY);

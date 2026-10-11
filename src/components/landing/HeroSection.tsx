@@ -1,6 +1,6 @@
 import {Image, ImageSourcePropType, Text, View} from "react-native";
-import {styles} from "@/app/styles";
-import {LOGO_SOURCE} from "@/app/const/landing";
+import {styles} from "../../styles/styles";
+import {LOGO_SOURCE} from "../../const/landing";
 import React from "react";
 
 interface HeroSectionProps {

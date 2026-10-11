@@ -1,8 +1,8 @@
-import {FacilityItem} from "@/app/types/landing";
+import { FacilityItem } from "@/types/landing";
 import React from "react";
-import {Text, View} from "react-native";
-import {styles} from "@/app/styles";
-import {FacilityCard} from "@/app/components/landing/FacilityCard";
+import { Text, View } from "react-native";
+import { styles } from "@/styles/styles";
+import { FacilityCard } from "@/components/landing/FacilityCard";
 
 interface FacilitySectionProps {
     facilities: FacilityItem[]

@@ -1,7 +1,7 @@
-import {ProfileData} from "@/app/types/landing";
-import {Pressable, Text, View} from "react-native";
-import {styles} from "@/app/styles";
-import {Ionicons} from "@expo/vector-icons";
+import { ProfileData } from "@/types/landing";
+import { Pressable, Text, View } from "react-native";
+import { styles } from "@/styles/styles";
+import { Ionicons } from "@expo/vector-icons";
 import React from "react";
 
 interface ProfileCardProps {
