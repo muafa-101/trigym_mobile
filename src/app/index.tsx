@@ -20,7 +20,7 @@ export default function LandingScreen() {
   const router = useRouter();
 
   const handleProfilePress = () => {
-    router.push("/profile-section/profile" as any);
+    router.push("./profile");
   };
 
   return (
