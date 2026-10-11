@@ -10,11 +10,10 @@ import {
   View,
 } from "react-native";
 import { styles } from "./styles";
-import {CLASSES, FACILITIES, HERO_DESCRIPTION, LOGO_SOURCE, PROFILE} from "@/app/const/landing";
-import {ProfileCard} from "@/app/components/landing/ProfileCard";
-import {HeroSection} from "@/app/components/landing/HeroSection";
-import {FacilitySection} from "@/app/components/landing/FacilitySection";
-import {ClassSection} from "@/app/components/landing/ClassSection";
+import { CLASSES, FACILITIES, HERO_DESCRIPTION, LOGO_SOURCE, PROFILE } from "@/const/landing";import { ProfileCard } from "@/components/landing/ProfileCard";
+import {HeroSection} from "@/components/landing/HeroSection";
+import {FacilitySection} from "@/components/landing/FacilitySection";
+import {ClassSection} from "@/components/landing/ClassSection";
 
 export default function LandingScreen() {
   const router = useRouter();

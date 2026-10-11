@@ -44,11 +44,11 @@ export default function ProfileScreen() {
   }
 
   function handleHistory() {
-    router.push("/profile-section/histori" as any);
+    router.push("./histori"); 
   }
 
   function handleQrCode() {
-  router.push("/profile-section/qr" as any);
+  router.push("./qr");
   }
   function handleFollowClass() {
     router.push("/kelas/weight-training" as any);
