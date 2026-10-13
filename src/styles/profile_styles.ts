@@ -1,26 +1,23 @@
 import { StyleSheet } from "react-native";
 
 const GRAY = "#DADADA";
+const BLUE = "#548CFF";
+const NAVY = "#283350";
+const DEEP = "#1F4DA0";
 
 export const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#FFFFFF" },
-  scroll: { padding: 8 },
-  page: {
-    backgroundColor: GRAY,
-    borderRadius: 20,
-    padding: 14,
-    paddingBottom: 24,
-    gap: 16,
-  },
+  safe: { flex: 1, backgroundColor: "#D6F3FB" },
+  scroll: { padding: 20, paddingBottom: 16 },
+  page: { gap: 14 },
 
   /* Kartu member (biru) */
   memberCard: {
-    backgroundColor: "#548CFF",
+    backgroundColor: BLUE,
     borderRadius: 14,
     overflow: "hidden",
   },
   memberTopBar: { height: 24 },
-  memberDivider: { height: 4, backgroundColor: GRAY },
+  memberDivider: { height: 4, backgroundColor: "rgba(255,255,255,0.85)" },
   memberBody: {
     paddingVertical: 18,
     paddingHorizontal: 14,
@@ -33,7 +30,6 @@ export const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 14,
   },
-  extendPillPressed: { opacity: 0.7 },
   extendPillText: {
     color: "#2A4B9B",
     fontSize: 11,
@@ -97,7 +93,6 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 4,
   },
-  historyIconBoxPressed: { opacity: 0.7 },
   historyLabelText: { color: "#FFFFFF", fontSize: 10, fontWeight: "700" },
 
   flameCard: {
@@ -107,11 +102,6 @@ export const styles = StyleSheet.create({
     borderRadius: 14,
     alignItems: "center",
     justifyContent: "center",
-  },
-
-  flameCardPressed: {
-    opacity: 0.85,
-    transform: [{ scale: 0.98 }],
   },
 
   /* Status ramai */
@@ -173,46 +163,62 @@ export const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 16,
   },
-  followButtonPressed: { opacity: 0.75 },
   followButtonText: { color: "#FFFFFF", fontSize: 12, fontWeight: "700" },
 
-  /* Pilihan kelas mingguan */
+  /* Pilihan kelas mingguan (tema sama dengan landing) */
   classSection: {
-    backgroundColor: "#F9D9A0",
-    borderRadius: 14,
-    padding: 8,
-    gap: 8,
+    backgroundColor: BLUE,
+    borderRadius: 16,
+    padding: 10,
+    gap: 10,
   },
   classHeader: {
-    borderWidth: 2,
-    borderColor: "#ffff",
-    backgroundColor: "#FF8A1F",
-    borderRadius: 12,
-    paddingVertical: 10,
-  },
-  classHeaderText: {
-    color: "#FFFF",
-    fontSize: 14,
-    fontWeight: "700",
-    textAlign: "center",
-  },
-  classRow: { flexDirection: "row", gap: 5 },
-  classCard: {
-    borderWidth: 2,
-    borderColor: "#ffff",
-    flex: 1,
-    aspectRatio: 0.6,
-    backgroundColor: "#FF8A1F",
-    borderRadius: 12,
-    paddingTop: 8,
+    backgroundColor: NAVY,
+    borderRadius: 10,
+    paddingVertical: 12,
     alignItems: "center",
   },
-  classCardPressed: { opacity: 0.8 },
-  classLabel: {
-    color: GRAY,
-    fontSize: 9,
+  classHeaderText: {
+    color: "#E6E9F2",
+    fontSize: 15,
     fontWeight: "600",
+    letterSpacing: 0.5,
     textAlign: "center",
   },
-  classIconWrap: { flex: 1, justifyContent: "center" },
+  classList: { gap: 10 },
+  classCard: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: DEEP,
+    borderRadius: 16,
+    padding: 12,
+    gap: 12,
+  },
+  classIconWrap: {
+    width: 56,
+    height: 56,
+    borderRadius: 14,
+    backgroundColor: "rgba(255,255,255,0.16)",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  classTextWrap: { flex: 1, gap: 4 },
+  classLabel: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "800",
+    letterSpacing: 0.5,
+  },
+  classDesc: { color: "#F1F5FF", fontSize: 12, lineHeight: 18 },
+  classMetaRow: { flexDirection: "row", gap: 8, marginTop: 4 },
+  metaChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 5,
+    backgroundColor: "rgba(255,255,255,0.16)",
+    borderRadius: 999,
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+  },
+  metaText: { color: "#FFFFFF", fontSize: 11, fontWeight: "600" },
 });

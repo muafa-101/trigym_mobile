@@ -1,26 +1,23 @@
-import { ClassItem } from "@/types/landing";
-import { styles } from "@/styles/styles";
-import { Text, View } from "react-native";
-import { CLASSES } from "@/const/landing";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
+import { Carousel } from "@/components/landing/Carousel";
 import { ClassCard } from "@/components/landing/ClassCard";
+import { styles as s } from "@/styles/styles";
+import { ClassItem } from "@/types/landing";
+import React from "react";
+import { Text, View } from "react-native";
 
 interface ClassSectionProps {
-    classes: ClassItem[]
+  classes: ClassItem[];
 }
 
-export const ClassSection: React.FC<ClassSectionProps> = ({classes}) => {
-    return (
-        <View style={styles.classSection}>
-            <View style={styles.classHeader}>
-                <Text style={styles.sectionTitle}>PILIHAN KELAS</Text>
-            </View>
-            <View style={styles.classRow}>
-                {CLASSES.map((item) => (
-                    <ClassCard key={item.label} classItem={item} />
-                ))}
-            </View>
-        </View>
-    )
-}
+export const ClassSection: React.FC<ClassSectionProps> = ({ classes }) => (
+  <View style={s.section}>
+    <View style={s.sectionTitleWrap}>
+      <Text style={s.sectionTitle}>PILIHAN KELAS</Text>
+    </View>
+    <Carousel
+      data={classes}
+      keyExtractor={(c) => c.label}
+      renderItem={(c) => <ClassCard classItem={c} />}
+    />
+  </View>
+);

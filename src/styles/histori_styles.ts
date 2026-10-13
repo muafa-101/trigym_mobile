@@ -1,44 +1,45 @@
 import { StyleSheet } from "react-native";
 
-const GRAY = "#DADADA";
+const BLUE = "#548CFF";
+const DEEP = "#1F4DA0";
 
 export const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#FFFFFF" },
-  scroll: { padding: 8 },
-  page: {
-    backgroundColor: GRAY,
-    borderRadius: 20,
-    padding: 14,
-    paddingBottom: 24,
-    gap: 16,
-  },
+  safe: { flex: 1, backgroundColor: "#D6F3FB" },
+  scroll: { padding: 20, paddingBottom: 16 },
+  page: { gap: 14 },
 
   summaryCard: {
-    backgroundColor: "#8DEE7E",
-    borderRadius: 14,
-    paddingVertical: 14,
+    backgroundColor: BLUE,
+    borderRadius: 16,
+    paddingVertical: 18,
     alignItems: "center",
     gap: 4,
   },
-  summaryLabel: { color: "#1B5E20", fontSize: 11, fontWeight: "700" },
-  summaryValue: { color: "#1B5E20", fontSize: 28, fontWeight: "800" },
+  summaryLabel: {
+    color: "#E6E9F2",
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 1,
+  },
+  summaryValue: { color: "#FFFFFF", fontSize: 32, fontWeight: "800" },
 
   listSection: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 14,
-    padding: 12,
-    gap: 8,
+    backgroundColor: BLUE,
+    borderRadius: 16,
+    padding: 10,
+    gap: 10,
   },
   historyItem: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 6,
-    borderBottomWidth: 1,
-    borderBottomColor: GRAY,
+    backgroundColor: DEEP,
+    borderRadius: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
   },
-  historyClass: { color: "#333333", fontSize: 12, fontWeight: "600" },
-  historyDate: { color: "#777777", fontSize: 10 },
+  historyClass: { color: "#FFFFFF", fontSize: 14, fontWeight: "700" },
+  historyDate: { color: "#C9D8FF", fontSize: 11, marginTop: 2 },
   historyTimeWrap: { alignItems: "flex-end", gap: 2 },
-  historyTime: { color: "#2E7D32", fontSize: 11, fontWeight: "700" },
+  historyTime: { color: "#B6F2E0", fontSize: 11, fontWeight: "700" },
 });

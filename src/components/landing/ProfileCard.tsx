@@ -1,29 +1,27 @@
+import { styles as s } from "@/styles/styles";
 import { ProfileData } from "@/types/landing";
-import { Pressable, Text, View } from "react-native";
-import { styles } from "@/styles/styles";
 import { Ionicons } from "@expo/vector-icons";
 import React from "react";
+import { Pressable, Text, View } from "react-native";
 
 interface ProfileCardProps {
-    profile: ProfileData;
-    onPress: () => void;
+  profile: ProfileData;
+  onPress: () => void;
 }
 
-export const ProfileCard: React.FC<ProfileCardProps> = ({profile, onPress}) => {
-    return (
-        <Pressable
-            onPress={onPress}
-            android_ripple={{ color: "rgba(0,0,0,0.1)" }}
-            style={({ pressed }) => [
-                styles.profileCard,
-                pressed && { opacity: 0.85 },
-            ]}
-        >
-            <Ionicons name="person" size={44} color="#FFFF" />
-            <View style={styles.profileTextWrap}>
-                <Text style={styles.profileText}>{profile.name}</Text>
-                <Text style={styles.profileText}>{profile.nim}</Text>
-            </View>
-        </Pressable>
-    )
-}
+export const ProfileCard: React.FC<ProfileCardProps> = ({
+  profile,
+  onPress,
+}) => (
+  <Pressable
+    onPress={onPress}
+    android_ripple={{ color: "rgba(0,0,0,0.1)" }}
+    style={({ pressed }) => [s.profileCard, pressed && { opacity: 0.85 }]}
+  >
+    <Ionicons name="person" size={48} color="#2F6BFF" />
+    <View style={s.profileTextWrap}>
+      <Text style={s.profileText}>{profile.name}</Text>
+      <Text style={s.profileText}>{profile.nim}</Text>
+    </View>
+  </Pressable>
+);

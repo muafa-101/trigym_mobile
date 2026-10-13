@@ -15,6 +15,9 @@ export interface Member {
 export interface GymClass {
   label: string;
   icon: ClassIcon;
+  desc?: string;
+  duration?: string;
+  level?: string;
 }
 
 export interface CheckinHistory {

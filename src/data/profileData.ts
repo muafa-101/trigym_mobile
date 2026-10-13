@@ -8,10 +8,34 @@ export const MEMBER: Member = {
 };
 
 export const WEEKLY_CLASSES: GymClass[] = [
-  { label: "YOGA &\nPILATES", icon: "yoga" },
-  { label: "WEIGHT\nTRAINING", icon: "weight-lifter" },
-  { label: "CARDIO\n& HIT", icon: "heart-pulse" },
-  { label: "ZUMBA", icon: "human-female-dance" },
+  {
+    label: "YOGA &\nPILATES",
+    icon: "yoga",
+    desc: "Tingkatkan fleksibilitas, keseimbangan, dan ketenangan pikiran.",
+    duration: "60 menit",
+    level: "Semua level",
+  },
+  {
+    label: "WEIGHT\nTRAINING",
+    icon: "weight-lifter",
+    desc: "Bangun kekuatan dan massa otot dengan latihan beban terarah.",
+    duration: "60 menit",
+    level: "Menengah",
+  },
+  {
+    label: "CARDIO\n& HIT",
+    icon: "heart-pulse",
+    desc: "Latihan interval intensitas tinggi untuk membakar kalori lebih cepat.",
+    duration: "45 menit",
+    level: "Menengah",
+  },
+  {
+    label: "ZUMBA",
+    icon: "human-female-dance",
+    desc: "Kardio penuh energi dengan gerakan tari yang menyenangkan.",
+    duration: "45 menit",
+    level: "Pemula",
+  },
 ];
 
 // checkOutTime: null artinya member lupa checkout, jadi dihitung otomatis (+2 jam)
