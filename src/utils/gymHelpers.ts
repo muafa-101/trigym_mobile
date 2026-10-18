@@ -1,58 +1,117 @@
-import { CheckinHistory } from "../types/gym";
+/**
+ * gymHelpers.ts
+ * ------------------------------------------------------------------
+ * Fungsi-fungsi kecil (tanpa tampilan) khusus urusan gym:
+ * status keramaian, status membership, sesi latihan, format rupiah.
+ */
+import {
+  AUTO_CHECKOUT_HOURS,
+  CROWD_BUSY_FROM,
+  CROWD_NORMAL_FROM,
+  EXPIRING_SOON_DAYS,
+} from "@/const/gymConfig";
+import { Visit } from "@/types/gym";
+import { formatTime, getDaysLeft } from "@/utils/dateHelpers";
 
-export interface StatusInfo {
+/* ------------------------------------------------------------------
+ * Status keramaian
+ * ------------------------------------------------------------------ */
+
+// Nama warna di theme.ts. Dipilih lewat nama supaya ikut sistem tema.
+export type CrowdColorKey = "crowdLow" | "crowdMid" | "crowdHigh";
+
+export interface CrowdInfo {
   label: string;
-  color: string;
+  colorKey: CrowdColorKey;
 }
 
-// Batas waktu di gym sebelum otomatis checkout (dalam jam)
-const AUTO_CHECKOUT_HOURS = 2;
-
-// Menentukan status keramaian dari jumlah check-in
-export function getStatusInfo(checkinCount: number): StatusInfo {
-  if (checkinCount < 40) {
-    return { label: "SEPI", color: "#43A040" };
+/** Menentukan status keramaian dari jumlah orang yang sedang check-in. */
+export function getCrowdInfo(count: number): CrowdInfo {
+  if (count < CROWD_NORMAL_FROM) return { label: "SEPI", colorKey: "crowdLow" };
+  if (count < CROWD_BUSY_FROM) {
+    return { label: "NORMAL", colorKey: "crowdMid" };
   }
-  if (checkinCount < 90) {
-    return { label: "NORMAL", color: "#FF8A1F" };
+  return { label: "RAMAI", colorKey: "crowdHigh" };
+}
+
+/* ------------------------------------------------------------------
+ * Status membership
+ * ------------------------------------------------------------------ */
+
+export type MembershipColorKey = "mint" | "warning" | "danger";
+
+export interface MembershipStatus {
+  label: string; // AKTIF / SEGERA BERAKHIR / BERAKHIR
+  detail: string; // "45 hari lagi", "Berakhir hari ini", dst
+  colorKey: MembershipColorKey;
+  isActive: boolean; // masih boleh check-in?
+  daysLeft: number;
+}
+
+export function getMembershipStatus(
+  validUntil: string,
+  now: Date = new Date(),
+): MembershipStatus {
+  const daysLeft = getDaysLeft(validUntil, now);
+
+  if (daysLeft < 0) {
+    return {
+      label: "BERAKHIR",
+      detail: "Sudah kedaluwarsa",
+      colorKey: "danger",
+      isActive: false,
+      daysLeft,
+    };
   }
-  return { label: "RAMAI", color: "#FF5C5C" };
-}
-
-// Menghitung sisa hari membership dari tanggal format DD/MM/YYYY
-export function getDaysLeft(validUntil: string): number {
-  const [day, month, year] = validUntil.split("/").map(Number);
-  const endDate = new Date(year, month - 1, day);
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const msPerDay = 1000 * 60 * 60 * 24;
-  return Math.ceil((endDate.getTime() - today.getTime()) / msPerDay);
-}
-
-// Jam checkout otomatis = jam masuk + 2 jam. Contoh: "18:30" -> "20:30"
-export function getAutoCheckout(checkInTime: string): string {
-  const [hour, minute] = checkInTime.split(":").map(Number);
-  const newHour = (hour + AUTO_CHECKOUT_HOURS) % 24;
-  const hh = String(newHour).padStart(2, "0");
-  const mm = String(minute).padStart(2, "0");
-  return `${hh}:${mm}`;
-}
-
-// Teks jam keluar: jam asli kalau checkout sendiri, atau "Otomatis HH:MM"
-export function getCheckoutLabel(item: CheckinHistory): string {
-  if (item.checkOutTime !== null) {
-    return item.checkOutTime;
+  const detail = daysLeft === 0 ? "Berakhir hari ini" : `${daysLeft} hari lagi`;
+  if (daysLeft <= EXPIRING_SOON_DAYS) {
+    return {
+      label: "SEGERA BERAKHIR",
+      detail,
+      colorKey: "warning",
+      isActive: true,
+      daysLeft,
+    };
   }
-  return `Otomatis ${getAutoCheckout(item.checkInTime)}`;
+  return { label: "AKTIF", detail, colorKey: "mint", isActive: true, daysLeft };
 }
 
-// Menghitung total kunjungan pakai loop for...of
-export function countVisits(history: CheckinHistory[]): number {
-  let total = 0;
-  for (const item of history) {
-    total += 1;
-  }
-  return total;
+/* ------------------------------------------------------------------
+ * Sesi latihan
+ * ------------------------------------------------------------------ */
+
+/** Waktu check-out otomatis = jam masuk + AUTO_CHECKOUT_HOURS. */
+export function getAutoCheckoutDate(visit: Visit): Date {
+  const checkIn = new Date(visit.checkInAt);
+  return new Date(checkIn.getTime() + AUTO_CHECKOUT_HOURS * 60 * 60 * 1000);
+}
+
+/**
+ * Apakah kunjungan ini masih berlangsung?
+ * Ya, kalau belum check-out DAN belum lewat batas otomatis.
+ */
+export function isVisitActive(visit: Visit, now: Date = new Date()): boolean {
+  if (visit.checkOutAt !== null) return false;
+  return now.getTime() < getAutoCheckoutDate(visit).getTime();
+}
+
+/**
+ * Teks jam keluar untuk satu baris riwayat:
+ *  - masih berlangsung -> "Sedang berlatih"
+ *  - check-out sendiri -> jam aslinya
+ *  - lupa check-out    -> "Otomatis HH:MM"
+ */
+export function getCheckoutLabel(visit: Visit, now: Date = new Date()): string {
+  if (visit.checkOutAt !== null) return formatTime(new Date(visit.checkOutAt));
+  if (isVisitActive(visit, now)) return "Sedang berlatih";
+  return `Otomatis ${formatTime(getAutoCheckoutDate(visit))}`;
+}
+
+/* ------------------------------------------------------------------
+ * Format teks
+ * ------------------------------------------------------------------ */
+
+/** 150000 -> "Rp 150.000" */
+export function formatRupiah(amount: number): string {
+  return "Rp " + String(amount).replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }

@@ -1,45 +1,48 @@
+/**
+ * histori_styles.ts  (gaya halaman RIWAYAT & STREAK)
+ */
 import { StyleSheet } from "react-native";
+import { ThemeColors } from "@/const/theme";
 
-const BLUE = "#548CFF";
-const DEEP = "#1F4DA0";
+export const createStyles = (c: ThemeColors) =>
+  StyleSheet.create({
+    /* Ringkasan streak (kotak ungu) */
+    streakRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 14,
+      backgroundColor: c.flameCard,
+      borderRadius: 14,
+      padding: 14,
+    },
+    streakNumber: {
+      color: c.white,
+      fontSize: 40,
+      fontWeight: "900",
+      lineHeight: 44,
+    },
+    streakTextWrap: { flex: 1, gap: 2 },
+    streakTitle: { color: c.white, fontSize: 14, fontWeight: "800" },
+    streakSub: { color: c.white, fontSize: 12, opacity: 0.9 },
 
-export const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: "#D6F3FB" },
-  scroll: { padding: 20, paddingBottom: 16 },
-  page: { gap: 14 },
-
-  summaryCard: {
-    backgroundColor: BLUE,
-    borderRadius: 16,
-    paddingVertical: 18,
-    alignItems: "center",
-    gap: 4,
-  },
-  summaryLabel: {
-    color: "#E6E9F2",
-    fontSize: 12,
-    fontWeight: "700",
-    letterSpacing: 1,
-  },
-  summaryValue: { color: "#FFFFFF", fontSize: 32, fontWeight: "800" },
-
-  listSection: {
-    backgroundColor: BLUE,
-    borderRadius: 16,
-    padding: 10,
-    gap: 10,
-  },
-  historyItem: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: DEEP,
-    borderRadius: 14,
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-  },
-  historyClass: { color: "#FFFFFF", fontSize: 14, fontWeight: "700" },
-  historyDate: { color: "#C9D8FF", fontSize: 11, marginTop: 2 },
-  historyTimeWrap: { alignItems: "flex-end", gap: 2 },
-  historyTime: { color: "#B6F2E0", fontSize: 11, fontWeight: "700" },
-});
+    /* Daftar riwayat */
+    totalText: {
+      color: c.textMuted,
+      fontSize: 11,
+      fontWeight: "600",
+      textAlign: "center",
+    },
+    item: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: c.deep,
+      borderRadius: 14,
+      paddingVertical: 12,
+      paddingHorizontal: 14,
+    },
+    itemDate: { color: c.text, fontSize: 14, fontWeight: "700" },
+    itemDay: { color: c.textMuted, fontSize: 11, marginTop: 2 },
+    itemTimeWrap: { alignItems: "flex-end", gap: 2 },
+    itemTime: { color: c.mint, fontSize: 11, fontWeight: "700" },
+  });
