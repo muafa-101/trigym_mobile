@@ -6,12 +6,18 @@
  *   2. Sesi latihan: TAMPILKAN QR (untuk check-in) / CHECK-OUT
  *   3. HISTORI, QR, dan kartu api (streak mingguan, bisa ditekan)
  *   4. Status keramaian gym
- *   5. Tombol KELUAR
+ *   5. Kartu Kutipan Motivasi (fetch API eksternal)  <-- MODUL 3
+ *   6. Tombol KELUAR
  *
  * Konsep modul 2 yang dipakai di sini:
  *   - useState : buka/tutup pop up streak
  *   - useEffect: animasi api berdenyut
  *   - Router   : router.push() ke halaman lain, router.replace() untuk keluar
+ *
+ * Konsep modul 3 yang dipakai (via MotivationCard):
+ *   - Fetch external endpoint -> Interface MotivationQuote (quoteService.ts)
+ *   - Custom async function (fetchMotivationQuote) + pre-built async (fetch)
+ *   - .then(), .resolve(), .reject() di quoteService.ts
  */
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -19,6 +25,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Animated, Text, View } from "react-native";
 import { CrowdStatusCard } from "@/components/gym/CrowdStatusCard";
 import { MemberCard } from "@/components/gym/MemberCard";
+import { MotivationCard } from "@/components/gym/MotivationCard";
 import { StreakModal } from "@/components/gym/StreakModal";
 import { FadeInView } from "@/components/ui/FadeInView";
 import { PressableScale } from "@/components/ui/PressableScale";
@@ -170,6 +177,11 @@ export default function HomeScreen() {
       {/* ---------- Status ramai ---------- */}
       <FadeInView delay={240}>
         <CrowdStatusCard />
+      </FadeInView>
+
+      {/* ---------- Kutipan Motivasi (Modul 3: fetch API + Interface) ---------- */}
+      <FadeInView delay={320}>
+        <MotivationCard />
       </FadeInView>
 
       {/* ---------- Keluar ---------- */}
