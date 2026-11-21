@@ -23,7 +23,16 @@ import { useThemedStyles } from "@/context/ThemeContext";
 import { createCommonStyles } from "@/styles/common_styles";
 import { createStyles } from "@/styles/login_styles";
 
+import LoginForm from "@/components/ui/LoginForm";
+
 export default function RoleScreen() {
+  // NOTE: This screen now serves as the entry point for authentication.
+  // It uses the global AuthContext (Supabase) and displays a login form
+  // that matches the visual style of other screens (hero layout).
+  // After successful login the AuthProvider will navigate to the appropriate
+  // dashboard (member home by default).
+  return <LoginForm />;
+}
   const router = useRouter();
   const s = useThemedStyles(createStyles);
   const common = useThemedStyles(createCommonStyles);

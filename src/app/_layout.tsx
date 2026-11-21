@@ -25,6 +25,7 @@ import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
 import { GymProvider } from "@/context/GymContext";
+import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
 
 /**
@@ -96,6 +97,16 @@ function ThemedStack() {
 }
 
 export default function RootLayout() {
+  return (
+    <ThemeProvider>
+      <AuthProvider>
+        <GymProvider>
+          <ThemedStack />
+        </GymProvider>
+      </AuthProvider>
+    </ThemeProvider>
+  );
+}
   return (
     <ThemeProvider>
       <GymProvider>

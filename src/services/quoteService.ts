@@ -119,7 +119,7 @@ function getRandomFallback(): MotivationQuote {
  */
 function fetchWithTimeout(url: string, ms = 6000): Promise<Response> {
   // Promise eksplisit: resolve & reject dipanggil secara manual
-  return new Promise<Response>((resolve, reject) => {
+  return new Promise<Response>((resolve, regitject) => {
     // Timer: jika fetch terlalu lama → reject dengan error timeout
     const timer = setTimeout(() => {
       reject(new Error(`Request timeout setelah ${ms} ms`));
