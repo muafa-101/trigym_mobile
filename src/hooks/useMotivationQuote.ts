@@ -37,28 +37,34 @@ export function useMotivationQuote(): UseMotivationQuoteResult {
   const [trigger, setTrigger] = useState(0);
 
   useEffect(() => {
-    // Reset state sebelum fetch baru dimulai
-    setLoading(true);
-    setError(null);
+    let isMounted = true;
 
     // Panggil custom async function dari quoteService
     // Gunakan .then() agar konsisten dengan gaya Kriteria 3
     fetchMotivationQuote()
       .then((result: MotivationQuote) => {
+        if (!isMounted) return;
         setQuote(result);
         setLoading(false);
       })
       .catch((err: unknown) => {
+        if (!isMounted) return;
         // Jarang terjadi (quoteService sudah punya fallback internal),
         // tapi tetap ditangani untuk keamanan
         const msg = err instanceof Error ? err.message : "Gagal memuat kutipan";
         setError(msg);
         setLoading(false);
       });
+
+    return () => {
+      isMounted = false;
+    };
   }, [trigger]); // jalankan ulang setiap trigger berubah
 
   /** Fungsi refresh: panggil untuk mendapat kutipan baru dari API. */
   function refresh() {
+    setLoading(true);
+    setError(null);
     setTrigger((prev) => prev + 1);
   }
 

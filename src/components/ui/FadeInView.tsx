@@ -5,7 +5,7 @@
  * (fade + geser) saat layar dibuka. `delay` mengatur kapan mulai,
  * jadi kartu bisa muncul berurutan.
  */
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { Animated, StyleProp, ViewStyle } from "react-native";
 
 interface FadeInViewProps {
@@ -19,8 +19,8 @@ export const FadeInView: React.FC<FadeInViewProps> = ({
   style,
   children,
 }) => {
-  // Nilai animasi 0 -> 1. useRef supaya nilainya tidak ter-reset tiap render.
-  const anim = useRef(new Animated.Value(0)).current;
+  // Nilai animasi 0 -> 1. useState supaya nilainya tidak ter-reset tiap render.
+  const [anim] = useState(() => new Animated.Value(0));
 
   // useEffect: jalankan animasi sekali setelah komponen tampil
   useEffect(() => {

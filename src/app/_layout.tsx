@@ -53,7 +53,21 @@ function ThemedStack() {
         }}
       >
         {/* Stack.Screen = pengaturan khusus satu halaman */}
-        <Stack.Screen name="index" options={{ title: "TRIGYM" }} />
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="login"
+          options={{
+            title: "TRIGYM",
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="signup"
+          options={{
+            title: "Daftar Akun",
+            headerShown: false,
+          }}
+        />
         <Stack.Screen
           name="home"
           options={{
@@ -104,14 +118,6 @@ export default function RootLayout() {
           <ThemedStack />
         </GymProvider>
       </AuthProvider>
-    </ThemeProvider>
-  );
-}
-  return (
-    <ThemeProvider>
-      <GymProvider>
-        <ThemedStack />
-      </GymProvider>
     </ThemeProvider>
   );
 }

@@ -12,13 +12,14 @@
  * aplikasi ini. Keduanya akan sama setelah ada server.
  */
 import { useRouter } from "expo-router";
-import React from "react";
+import React, { useCallback } from "react";
 import { Text, View } from "react-native";
 import { CrowdStatusCard } from "@/components/gym/CrowdStatusCard";
 import { FadeInView } from "@/components/ui/FadeInView";
 import { PressableScale } from "@/components/ui/PressableScale";
 import { Screen } from "@/components/ui/Screen";
 import { EXPIRING_SOON_DAYS, GYM_NAME } from "@/const/gymConfig";
+import { useAuth } from "@/context/AuthContext";
 import { useGym } from "@/context/GymContext";
 import { useThemedStyles } from "@/context/ThemeContext";
 import { useGymCrowd } from "@/hooks/useGymCrowd";
@@ -26,12 +27,12 @@ import { createStyles } from "@/styles/admin_styles";
 import { createCommonStyles } from "@/styles/common_styles";
 import { formatTime } from "@/utils/dateHelpers";
 import { getMembershipStatus } from "@/utils/gymHelpers";
-
 export default function AdminDashboardScreen() {
   const router = useRouter();
   const s = useThemedStyles(createStyles);
   const common = useThemedStyles(createCommonStyles);
   const { members, activeVisits, getMember, checkOut } = useGym();
+  const { signOut } = useAuth();
   const { count: crowdCount } = useGymCrowd();
 
   // Hitung ringkasan member
@@ -40,6 +41,11 @@ export default function AdminDashboardScreen() {
   const expiringCount = statuses.filter(
     (st) => st.isActive && st.daysLeft <= EXPIRING_SOON_DAYS,
   ).length;
+
+  const handleLogout = useCallback(async () => {
+    await signOut();
+    router.replace("/login");
+  }, [signOut, router]);
 
   return (
     <Screen>
@@ -126,7 +132,7 @@ export default function AdminDashboardScreen() {
       {/* ---------- Keluar ---------- */}
       <FadeInView delay={260}>
         <PressableScale
-          onPress={() => router.replace("/")}
+          onPress={handleLogout}
           style={common.secondaryButton}
         >
           <Text style={common.secondaryButtonText}>KELUAR</Text>

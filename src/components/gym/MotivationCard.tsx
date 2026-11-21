@@ -37,7 +37,7 @@ export const MotivationCard: React.FC = () => {
         ) : quote ? (
           <>
             {/* Teks kutipan – dari Interface MotivationQuote.text */}
-            <Text style={s.quoteText}>"{quote.text}"</Text>
+            <Text style={s.quoteText}>{`"${quote.text}"`}</Text>
 
             {/* Nama tokoh – dari Interface MotivationQuote.author */}
             <Text style={s.authorText}>— {quote.author}</Text>

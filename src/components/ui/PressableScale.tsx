@@ -6,7 +6,7 @@
  * Dipakai sebagai pengganti Pressable biasa supaya semua tombol
  * terasa seragam.
  */
-import React, { useRef } from "react";
+import React, { useState } from "react";
 import {
   Animated,
   Pressable,
@@ -37,8 +37,8 @@ export const PressableScale: React.FC<PressableScaleProps> = ({
   ...rest
 }) => {
   // Dua nilai animasi: ukuran dan transparansi
-  const scale = useRef(new Animated.Value(1)).current;
-  const opacity = useRef(new Animated.Value(1)).current;
+  const [scale] = useState(() => new Animated.Value(1));
+  const [opacity] = useState(() => new Animated.Value(1));
 
   // Menganimasikan ukuran ke `s` dan transparansi ke `o` sekaligus
   const animateTo = (s: number, o: number) =>

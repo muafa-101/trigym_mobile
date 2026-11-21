@@ -1,81 +1,43 @@
 /**
- * index.tsx  (halaman PILIH PERAN, alamat "/")
+ * index.tsx  (halaman awal, alamat "/")
  * ------------------------------------------------------------------
- * Halaman pertama yang dibuka. Satu aplikasi dipakai dua jenis
- * pengguna: MEMBER dan ADMIN.
+ * Halaman pertama yang dibuka saat app diluncurkan.
+ * Fungsinya sebagai "penjaga gerbang":
+ *   - Jika sudah login (session aktif): langsung ke /home
+ *   - Jika belum login: redirect ke halaman /login
  *
- * PLACEHOLDER: belum ada login sungguhan. Tombol di sini langsung
- * membuka dashboard sesuai peran.
- * NANTI: ganti dengan form login (email + password). Server yang
- * memberi tahu akun ini member atau admin.
- *
- * Navigasi: router.replace() dipakai (bukan push) supaya tombol back
- * tidak kembali ke halaman ini. Untuk kembali, pakai tombol KELUAR.
+ * Halaman ini tidak menampilkan UI apa pun — hanya menampilkan loading
+ * sementara auth state diperiksa.
  */
 import { useRouter } from "expo-router";
-import React from "react";
-import { Image, Text, View } from "react-native";
-import { FadeInView } from "@/components/ui/FadeInView";
-import { PressableScale } from "@/components/ui/PressableScale";
-import { Screen } from "@/components/ui/Screen";
-import { HERO_DESCRIPTION, LOGO_SOURCE } from "@/const/gymConfig";
-import { useThemedStyles } from "@/context/ThemeContext";
-import { createCommonStyles } from "@/styles/common_styles";
-import { createStyles } from "@/styles/login_styles";
+import React, { useEffect } from "react";
+import { ActivityIndicator, View } from "react-native";
+import { useAuth } from "@/context/AuthContext";
+import { useTheme } from "@/context/ThemeContext";
 
-import LoginForm from "@/components/ui/LoginForm";
-
-export default function RoleScreen() {
-  // NOTE: This screen now serves as the entry point for authentication.
-  // It uses the global AuthContext (Supabase) and displays a login form
-  // that matches the visual style of other screens (hero layout).
-  // After successful login the AuthProvider will navigate to the appropriate
-  // dashboard (member home by default).
-  return <LoginForm />;
-}
+export default function IndexScreen() {
   const router = useRouter();
-  const s = useThemedStyles(createStyles);
-  const common = useThemedStyles(createCommonStyles);
+  const { session, loading } = useAuth();
+  const { colors } = useTheme();
 
+  useEffect(() => {
+    if (loading) return; // tunggu auth selesai dicek
+
+    if (session) {
+      // Sudah login -> langsung ke dashboard member
+      router.replace("/home");
+    } else {
+      // Belum login -> ke halaman login
+      router.replace("/login");
+    }
+  }, [loading, session, router]);
+
+  // Tampilkan spinner kecil sementara redirect
   return (
-    <Screen>
-      <FadeInView>
-        <View style={s.hero}>
-          <View style={s.heroTopBar} />
-          <View style={s.heroDivider} />
-          <View style={s.heroBody}>
-            <Image source={LOGO_SOURCE} style={s.logo} resizeMode="contain" />
-            <Text style={s.heroText}>{HERO_DESCRIPTION}</Text>
-          </View>
-        </View>
-      </FadeInView>
-
-      <FadeInView delay={120}>
-        <View style={common.card}>
-          <View style={common.sectionHeader}>
-            <Text style={common.sectionHeaderText}>MASUK SEBAGAI</Text>
-          </View>
-
-          {/* replace: pindah halaman TANPA menumpuk di riwayat back */}
-          <PressableScale
-            onPress={() => router.replace("/home")}
-            style={common.primaryButton}
-          >
-            <Text style={common.primaryButtonText}>MEMBER</Text>
-          </PressableScale>
-
-          <PressableScale
-            onPress={() => router.replace("/admin")}
-            style={common.secondaryButton}
-          >
-            <Text style={common.secondaryButtonText}>ADMIN</Text>
-          </PressableScale>
-
-          <Text style={s.footnote}>
-            Ini hanya contoh (placeholder). Nanti diganti login sungguhan.
-          </Text>
-        </View>
-      </FadeInView>
-    </Screen>
+    <View
+      style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: colors.background }}
+    >
+      <ActivityIndicator size="large" color={colors.cta} />
+    </View>
   );
 }

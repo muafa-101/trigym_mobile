@@ -21,8 +21,9 @@
  */
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Animated, Text, View } from "react-native";
+import { useAuth } from "@/context/AuthContext";
 import { CrowdStatusCard } from "@/components/gym/CrowdStatusCard";
 import { MemberCard } from "@/components/gym/MemberCard";
 import { MotivationCard } from "@/components/gym/MotivationCard";
@@ -43,14 +44,21 @@ export default function HomeScreen() {
   const common = useThemedStyles(createCommonStyles);
   const { colors } = useTheme();
   const { currentMember, myActiveVisit, streak, checkOut } = useGym();
+  const { signOut } = useAuth();
 
   const membership = getMembershipStatus(currentMember.validUntil);
+
+  /* ---------- Handler keluar: signOut Supabase lalu ke halaman login ---------- */
+  const handleLogout = useCallback(async () => {
+    await signOut();
+    router.replace("/login");
+  }, [signOut, router]);
 
   /* ---------- useState: pop up streak sedang terbuka atau tidak ---------- */
   const [streakOpen, setStreakOpen] = useState(false);
 
   /* ---------- useEffect: ikon api berdenyut pelan ---------- */
-  const pulse = useRef(new Animated.Value(1)).current;
+  const [pulse] = useState(() => new Animated.Value(1));
   useEffect(() => {
     const loop = Animated.loop(
       Animated.sequence([
@@ -187,7 +195,7 @@ export default function HomeScreen() {
       {/* ---------- Keluar ---------- */}
       <FadeInView delay={300}>
         <PressableScale
-          onPress={() => router.replace("/")}
+          onPress={handleLogout}
           style={common.secondaryButton}
         >
           <Text style={common.secondaryButtonText}>KELUAR</Text>
