@@ -20,94 +20,140 @@
  *   admin/scan.tsx        -> "/admin/scan"          check-in member
  *   admin/members.tsx     -> "/admin/members"       daftar member
  */
-import { Stack } from "expo-router";
+import {Stack, useRouter, useSegments} from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect } from "react";
 import { ThemeToggleButton } from "@/components/ui/ThemeToggleButton";
 import { GymProvider } from "@/context/GymContext";
-import { AuthProvider } from "@/context/AuthContext";
+import {AuthProvider, useAuth} from "@/context/AuthContext";
 import { ThemeProvider, useTheme } from "@/context/ThemeContext";
+import {ActivityIndicator, View} from "react-native";
 
 /**
  * Stack dipisah jadi komponen sendiri karena ia perlu membaca warna
  * tema (useTheme), sedangkan useTheme hanya boleh dipakai DI DALAM
  * ThemeProvider.
  */
+
+const PUBLIC_ROUTES = new Set(["login", "signup"]);
+
 function ThemedStack() {
-  const { colors, isDark } = useTheme();
+    const { colors, isDark } = useTheme();
+    const { session, loading } = useAuth();
+    const router = useRouter();
+    const segments = useSegments();
 
-  return (
-    <>
-      {/* Warna ikon baterai/jam di status bar HP */}
-      <StatusBar style={isDark ? "light" : "dark"} />
+    const isAuthenticated = Boolean(session);
 
-      <Stack
-        // screenOptions = pengaturan yang berlaku untuk SEMUA halaman
-        screenOptions={{
-          headerStyle: { backgroundColor: colors.headerBackground },
-          headerTintColor: colors.headerText,
-          headerTitleStyle: { color: colors.headerText },
-          headerShadowVisible: false, // tanpa garis tipis di bawah header
-          headerRight: () => <ThemeToggleButton />,
-          contentStyle: { backgroundColor: colors.background },
-        }}
-      >
-        {/* Stack.Screen = pengaturan khusus satu halaman */}
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="login"
-          options={{
-            title: "TRIGYM",
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="signup"
-          options={{
-            title: "Daftar Akun",
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="home"
-          options={{
-            title: "HOME",
-            headerBackVisible: false, // tidak ada tombol back ke halaman peran
-            gestureEnabled: false, // matikan swipe back (iOS)
-          }}
-        />
-        <Stack.Screen name="qr" options={{ title: "QR Member" }} />
-        <Stack.Screen name="histori" options={{ title: "Riwayat & Streak" }} />
-        <Stack.Screen
-          name="perpanjang"
-          options={{ title: "Perpanjang Membership" }}
-        />
-        <Stack.Screen
-          name="perpanjang-sukses"
-          options={{
-            title: "Berhasil",
-            headerBackVisible: false, // setelah bayar, tidak boleh back ke form
-            gestureEnabled: false,
-          }}
-        />
+    useEffect(() => {
+        if (loading) return;
 
-        {/* Halaman admin (folder app/admin/) */}
-        <Stack.Screen
-          name="admin/index"
-          options={{
-            title: "ADMIN",
-            headerBackVisible: false,
-            gestureEnabled: false,
-          }}
-        />
-        <Stack.Screen name="admin/scan" options={{ title: "Check-in Member" }} />
-        <Stack.Screen
-          name="admin/members"
-          options={{ title: "Daftar Member" }}
-        />
-      </Stack>
-    </>
-  );
+        const currentRoute = segments[0] ?? "index";
+        const isPublicRoute = PUBLIC_ROUTES.has(currentRoute);
+
+        if (!isAuthenticated && !isPublicRoute) {
+            router.replace("/login");
+        } else if (isAuthenticated && isPublicRoute) {
+            router.replace("/home");
+        }
+    }, [loading, isAuthenticated, segments, router]);
+
+    if (loading) {
+        return (
+            <View
+                style={{
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: colors.background,
+                }}
+            >
+                <StatusBar style={isDark ? "light" : "dark"} />
+                <ActivityIndicator size="large" color={colors.headerText} />
+            </View>
+        );
+    }
+
+    return (
+        <>
+            {/* Warna ikon baterai/jam di status bar HP */}
+            <StatusBar style={isDark ? "light" : "dark"} />
+
+            <Stack
+                screenOptions={{
+                    headerStyle: { backgroundColor: colors.headerBackground },
+                    headerTintColor: colors.headerText,
+                    headerTitleStyle: { color: colors.headerText },
+                    headerShadowVisible: false,
+                    headerRight: () => <ThemeToggleButton />,
+                    contentStyle: { backgroundColor: colors.background },
+                }}
+            >
+                {/* Halaman publik */}
+                <Stack.Screen name="index" options={{ headerShown: false }} />
+                <Stack.Protected guard={!isAuthenticated}>
+                    <Stack.Screen
+                        name="login"
+                        options={{
+                            title: "TRIGYM",
+                            headerShown: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="signup"
+                        options={{
+                            title: "Daftar Akun",
+                            headerShown: false,
+                        }}
+                    />
+                </Stack.Protected>
+
+                {/* Halaman terproteksi (wajib login) */}
+                <Stack.Protected guard={isAuthenticated}>
+                    <Stack.Screen
+                        name="home"
+                        options={{
+                            title: "HOME",
+                            headerBackVisible: false,
+                            gestureEnabled: false,
+                        }}
+                    />
+                    <Stack.Screen name="qr" options={{ title: "QR Member" }} />
+                    <Stack.Screen name="histori" options={{ title: "Riwayat & Streak" }} />
+                    <Stack.Screen
+                        name="perpanjang"
+                        options={{ title: "Perpanjang Membership" }}
+                    />
+                    <Stack.Screen
+                        name="perpanjang-sukses"
+                        options={{
+                            title: "Berhasil",
+                            headerBackVisible: false,
+                            gestureEnabled: false,
+                        }}
+                    />
+
+                    {/* Halaman admin (folder app/admin/) */}
+                    <Stack.Screen
+                        name="admin/index"
+                        options={{
+                            title: "ADMIN",
+                            headerBackVisible: false,
+                            gestureEnabled: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="admin/scan"
+                        options={{ title: "Check-in Member" }}
+                    />
+                    <Stack.Screen
+                        name="admin/members"
+                        options={{ title: "Daftar Member" }}
+                    />
+                </Stack.Protected>
+            </Stack>
+        </>
+    );
 }
 
 export default function RootLayout() {
